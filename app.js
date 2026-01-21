@@ -1,21 +1,23 @@
-function startLearning() {
-  const name = document.getElementById("username").value.trim();
-  const errorMsg = document.getElementById("errorMsg");
+document.addEventListener("DOMContentLoaded", function () {
 
-  if (name === "") {
-    errorMsg.innerText = "Please enter your name";
-    return;
-  }
+  const startBtn = document.getElementById("startBtn");
 
-  // Clear error
-  errorMsg.innerText = "";
+  startBtn.addEventListener("click", function () {
 
-  // Hide hero section
-  document.getElementById("hero").classList.add("d-none");
+    const name = document.getElementById("username").value.trim();
+    const errorMsg = document.getElementById("errorMsg");
 
-  // Show dashboard
-  document.getElementById("dashboard").classList.remove("d-none");
+    if (name === "") {
+      errorMsg.innerText = "Please enter your name";
+      return;
+    }
 
-  // Display name
-  document.getElementById("displayName").innerText = name;
-}
+    errorMsg.innerText = "";
+
+    document.getElementById("hero").classList.add("d-none");
+    document.getElementById("dashboard").classList.remove("d-none");
+    document.getElementById("displayName").innerText = name;
+
+  });
+
+});
