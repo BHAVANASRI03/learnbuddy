@@ -1,0 +1,30 @@
+body {
+  background: #0f172a;
+  color: #f8fafc;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.gold {
+  color: gold;
+  font-size: 3rem;
+}
+
+.card {
+  background: #1e293b;
+  border-radius: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.4);
+}
+
+input, select {
+  background: #020617 !important;
+  color: white !important;
+  border: none !important;
+}
+
+.concept {
+  background: #020617;
+  padding: 12px;
+  border-left: 4px solid #facc15;
+  margin-top: 10px;
+  border-radius: 8px;
+}
