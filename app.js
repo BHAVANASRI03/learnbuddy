@@ -1,77 +1,70 @@
-let profile = {};
-let qIndex = 0;
-let points = 0;
+let profile={}, q=0, score=0;
 
-const materialsData = {
-  math: {
-    slow: ["Basic Addition", "Basic Subtraction"],
-    average: ["Fractions", "Algebra Basics"]
+const learningContent={
+  math:{
+    slow:["Number Systems","Basic Arithmetic","Introduction to Algebra"],
+    average:["Algebra","Linear Equations","Geometry"]
   },
-  science: {
-    slow: ["Photosynthesis", "Newton Laws"],
-    average: ["Electricity", "Human Biology"]
+  science:{
+    slow:["Photosynthesis","States of Matter","Human Biology"],
+    average:["Electricity","Force & Motion","Chemical Reactions"]
   },
-  coding: {
-    slow: ["What is Programming?", "Variables"],
-    average: ["Loops", "Functions"]
+  coding:{
+    slow:["What is Programming?","Variables","Conditions"],
+    average:["Loops","Functions","Arrays"]
   }
 };
 
-const quizData = {
-  math: [{q:"2 + 2 = ?", a:"4"}],
-  science: [{q:"Plants use ___ for food?", a:"sunlight"}],
-  coding: [{q:"Language for web?", a:"javascript"}]
+const quizData={
+  math:[{q:"5 + 3 = ?",a:"8"}],
+  science:[{q:"Plants prepare food using?",a:"photosynthesis"}],
+  coding:[{q:"Language used for web?",a:"javascript"}]
 };
 
-function startApp() {
-  if (!userName.value.trim()) {
+function startApp(){
+  if(!userName.value.trim()){
     alert("Enter your name");
     return;
   }
-  welcome.classList.add("d-none");
-  mainApp.classList.remove("d-none");
+  hero.style.display="none";
+  app.classList.remove("d-none");
 }
 
-profileForm.addEventListener("submit", e => {
+profileForm.onsubmit=e=>{
   e.preventDefault();
-  profile.subject = subject.value;
-  profile.speed = speed.value;
-  showMaterials();
-});
-
-function showMaterials() {
-  materials.classList.remove("d-none");
-  concepts.innerHTML = "";
-  materialsData[profile.subject][profile.speed].forEach(c => {
-    concepts.innerHTML += `<div class="concept">${c}</div>`;
+  profile.subject=subject.value;
+  profile.speed=speed.value;
+  dashboard.classList.remove("d-none");
+  concepts.innerHTML="";
+  learningContent[profile.subject][profile.speed].forEach(c=>{
+    concepts.innerHTML+=`<div class="concept">${c}</div>`;
   });
-}
+};
 
-function startQuiz() {
-  materials.classList.add("d-none");
+function startQuiz(){
+  dashboard.classList.add("d-none");
   quiz.classList.remove("d-none");
   showQuestion();
 }
 
-function showQuestion() {
-  if (!quizData[profile.subject][qIndex]) {
-    questionBox.innerHTML = "<h5>🎉 Quiz Completed!</h5>";
+function showQuestion(){
+  if(!quizData[profile.subject][q]){
+    questionBox.innerHTML="<h5>🎉 Assessment Completed!</h5>";
     return;
   }
-
-  questionBox.innerHTML = `
-    <p>${quizData[profile.subject][qIndex].q}</p>
-    <input id="answer" class="form-control mb-2">
-    <button class="btn btn-primary" onclick="checkAnswer()">Submit</button>
+  questionBox.innerHTML=`
+    <p>${quizData[profile.subject][q].q}</p>
+    <input id="ans" class="form-control mb-2">
+    <button class="btn btn-primary" onclick="check()">Submit</button>
   `;
 }
 
-function checkAnswer() {
-  if (answer.value.toLowerCase() === quizData[profile.subject][qIndex].a) {
-    points += 10;
+function check(){
+  if(ans.value.toLowerCase()==quizData[profile.subject][q].a){
+    score+=10;
   }
-  qIndex++;
-  progressFill.style.width = (qIndex / quizData[profile.subject].length) * 100 + "%";
-  progressFill.innerText = points + " pts";
+  q++;
+  progressFill.style.width=(q/quizData[profile.subject].length)*100+"%";
+  progressFill.innerText=score+" pts";
   showQuestion();
 }
