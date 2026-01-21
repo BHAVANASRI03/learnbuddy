@@ -1,70 +1,93 @@
-let profile={}, q=0, score=0;
+let profile = {};
+let qIndex = 0;
+let score = 0;
 
-const learningContent={
-  math:{
-    slow:["Number Systems","Basic Arithmetic","Introduction to Algebra"],
-    average:["Algebra","Linear Equations","Geometry"]
+// CONTENT
+const learningData = {
+  math: {
+    slow: ["Number Systems", "Basic Arithmetic", "Intro to Algebra"],
+    average: ["Algebra", "Linear Equations", "Geometry"]
   },
-  science:{
-    slow:["Photosynthesis","States of Matter","Human Biology"],
-    average:["Electricity","Force & Motion","Chemical Reactions"]
+  science: {
+    slow: ["Photosynthesis", "States of Matter", "Human Biology"],
+    average: ["Electricity", "Force & Motion"]
   },
-  coding:{
-    slow:["What is Programming?","Variables","Conditions"],
-    average:["Loops","Functions","Arrays"]
+  coding: {
+    slow: ["What is Programming?", "Variables", "Conditions"],
+    average: ["Loops", "Functions"]
   }
 };
 
-const quizData={
-  math:[{q:"5 + 3 = ?",a:"8"}],
-  science:[{q:"Plants prepare food using?",a:"photosynthesis"}],
-  coding:[{q:"Language used for web?",a:"javascript"}]
+const quizData = {
+  math: [{ q: "5 + 5 = ?", a: "10" }],
+  science: [{ q: "Plants prepare food by?", a: "photosynthesis" }],
+  coding: [{ q: "Language used for web?", a: "javascript" }]
 };
 
-function startApp(){
-  if(!userName.value.trim()){
-    alert("Enter your name");
+// START APP (🔥 FIXED)
+function startApp() {
+  const nameInput = document.getElementById("userNameInput").value.trim();
+
+  if (nameInput === "") {
+    alert("Please enter your name");
     return;
   }
-  hero.style.display="none";
-  app.classList.remove("d-none");
+
+  document.getElementById("welcomeSection").classList.add("d-none");
+  document.getElementById("mainApp").classList.remove("d-none");
 }
 
-profileForm.onsubmit=e=>{
+// PROFILE FORM
+document.getElementById("profileForm").addEventListener("submit", function(e){
   e.preventDefault();
-  profile.subject=subject.value;
-  profile.speed=speed.value;
-  dashboard.classList.remove("d-none");
-  concepts.innerHTML="";
-  learningContent[profile.subject][profile.speed].forEach(c=>{
-    concepts.innerHTML+=`<div class="concept">${c}</div>`;
-  });
-};
 
-function startQuiz(){
-  dashboard.classList.add("d-none");
-  quiz.classList.remove("d-none");
+  profile.subject = document.getElementById("subject").value;
+  profile.speed = document.getElementById("speed").value;
+
+  const dashboard = document.getElementById("dashboard");
+  const concepts = document.getElementById("concepts");
+
+  concepts.innerHTML = "";
+  learningData[profile.subject][profile.speed].forEach(item => {
+    concepts.innerHTML += `<div class="concept">${item}</div>`;
+  });
+
+  dashboard.classList.remove("d-none");
+});
+
+// QUIZ
+function startQuiz() {
+  document.getElementById("dashboard").classList.add("d-none");
+  document.getElementById("quizSection").classList.remove("d-none");
   showQuestion();
 }
 
-function showQuestion(){
-  if(!quizData[profile.subject][q]){
-    questionBox.innerHTML="<h5>🎉 Assessment Completed!</h5>";
+function showQuestion() {
+  const questionBox = document.getElementById("questionBox");
+
+  if (!quizData[profile.subject][qIndex]) {
+    questionBox.innerHTML = "<h5>🎉 Quiz Completed!</h5>";
     return;
   }
-  questionBox.innerHTML=`
-    <p>${quizData[profile.subject][q].q}</p>
-    <input id="ans" class="form-control mb-2">
-    <button class="btn btn-primary" onclick="check()">Submit</button>
+
+  questionBox.innerHTML = `
+    <p>${quizData[profile.subject][qIndex].q}</p>
+    <input id="answerInput" class="form-control mb-2">
+    <button class="btn btn-primary" onclick="checkAnswer()">Submit</button>
   `;
 }
 
-function check(){
-  if(ans.value.toLowerCase()==quizData[profile.subject][q].a){
-    score+=10;
+function checkAnswer() {
+  const userAns = document.getElementById("answerInput").value.toLowerCase();
+
+  if (userAns === quizData[profile.subject][qIndex].a) {
+    score += 10;
   }
-  q++;
-  progressFill.style.width=(q/quizData[profile.subject].length)*100+"%";
-  progressFill.innerText=score+" pts";
+
+  qIndex++;
+  const progress = document.getElementById("progressFill");
+  progress.style.width = (qIndex / quizData[profile.subject].length) * 100 + "%";
+  progress.innerText = score + " pts";
+
   showQuestion();
 }
