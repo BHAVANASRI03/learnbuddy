@@ -1,11 +1,69 @@
-body{margin:0;font-family:Segoe UI;background:#0f172a;color:#fff}
-header{text-align:center;padding:15px;background:#1e293b}
-.container{max-width:900px;margin:20px auto;padding:20px;background:#1e293b;border-radius:10px}
-input,select,button{width:100%;padding:10px;margin:6px 0;border-radius:6px;border:none}
-button{background:#38bdf8;color:#000;font-weight:bold}
-#welcomePageContainer{height:100vh;display:flex;flex-direction:column;justify-content:center;align-items:center}
-#mainContent,#dashboard,#quizSection{display:none}
-table{width:100%;margin-top:10px;border-collapse:collapse}
-td,th{border:1px solid #334155;padding:6px;text-align:center}
-#progressBar{background:#334155;border-radius:10px;margin-top:10px}
-#progressFill{background:#22c55e;height:20px;border-radius:10px;text-align:center}
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f6f9;
+  color: #333;
+}
+
+.center-box {
+  text-align: center;
+  margin-top: 120px;
+}
+
+input {
+  padding: 10px;
+  width: 220px;
+  margin-top: 10px;
+}
+
+button {
+  padding: 10px 20px;
+  background: #2c3e50;
+  color: white;
+  border: none;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+button:hover {
+  background: #1a252f;
+}
+
+.hidden {
+  display: none;
+}
+
+header {
+  background: #2c3e50;
+  color: white;
+  padding: 15px;
+  text-align: center;
+}
+
+.card-container {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+  margin: 30px;
+}
+
+.card {
+  background: white;
+  padding: 20px;
+  width: 150px;
+  text-align: center;
+  border-radius: 8px;
+  box-shadow: 0 3px 8px rgba(0,0,0,0.1);
+  cursor: pointer;
+}
+
+.card:hover {
+  background: #ecf0f1;
+}
+
+#contentArea {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  padding: 20px;
+}
