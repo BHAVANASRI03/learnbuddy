@@ -8,7 +8,7 @@
 </head>
 <body>
 
-<!-- WELCOME SCREEN -->
+<!-- WELCOME -->
 <section id="welcomePageContainer">
   <h1>✨ Welcome to LearnBuddy Pro ✨</h1>
   <p>Enter your name to start learning</p>
@@ -42,28 +42,22 @@
 
     <select id="learningSpeed">
       <option value="slow">Slow Learner</option>
-      <option value="average">Average Learner</option>
-      <option value="topper">Topper</option>
     </select>
 
     <button type="submit">Start Learning</button>
   </form>
 
   <h2>📅 Study Planner</h2>
-  <div class="planner-row">
-    <input type="text" class="plannerSubject" placeholder="Subject">
-    <input type="number" class="plannerTime" placeholder="Minutes">
-    <button id="addPlannerBtn">Add</button>
-  </div>
+  <input type="text" id="plannerSubject" placeholder="Subject">
+  <input type="number" id="plannerTime" placeholder="Minutes">
+  <button id="addPlannerBtn">Add</button>
 
   <table id="plannerTable">
     <thead><tr><th>Subject</th><th>Time</th><th>❌</th></tr></thead>
     <tbody></tbody>
   </table>
 
-  <p>Total Planned Time: <span id="totalTime">0</span> mins</p>
-  <button id="savePlannerBtn">Save Planner</button>
-  <p id="plannerStatus"></p>
+  <p>Total Time: <span id="totalTime">0</span> mins</p>
 </section>
 
 <section class="container" id="dashboard">
@@ -77,7 +71,7 @@
   <h2>Quiz Time</h2>
   <div id="challengeContainer"></div>
   <div id="progressBar"><div id="progressFill">0 pts</div></div>
-  <button id="gameBtn">Play Quick Game</button>
+  <button id="gameBtn">Play Game</button>
 </section>
 
 </div>
