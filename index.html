@@ -1,79 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>LearnBuddy Pro</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>LearnBuddy Pro</title>
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- WELCOME -->
-<section id="welcomePageContainer">
-  <h1>✨ Welcome to LearnBuddy Pro ✨</h1>
+<!-- Welcome Page -->
+<div id="welcomePage" class="center-box">
+  <h1>Welcome to LearnBuddy Pro</h1>
   <p>Enter your name to start learning</p>
-  <input type="text" id="userNameInput" placeholder="Your Name">
+  <input type="text" id="username" placeholder="Your Name" />
   <button id="startBtn">Start Learning</button>
-</section>
+  <p id="errorMsg"></p>
+</div>
 
-<!-- MAIN APP -->
-<div id="mainContent">
+<!-- Dashboard -->
+<div id="dashboard" class="hidden">
+  <header>
+    <h2>Hello, <span id="displayName"></span> 👋</h2>
+    <p>Select a subject to begin</p>
+  </header>
 
-<header>
-  <h1>LearnBuddy Pro</h1>
-  <p>Smart Learning Planner</p>
-</header>
+  <div class="card-container">
+    <div class="card" onclick="selectSubject('Math')">Math</div>
+    <div class="card" onclick="selectSubject('Science')">Science</div>
+    <div class="card" onclick="selectSubject('Coding')">Coding</div>
+  </div>
 
-<section class="container" id="profilePlannerSection">
-  <h2>Learning Profile</h2>
-  <form id="profileForm">
-    <select id="learningStyle">
-      <option value="visual">Visual</option>
-      <option value="auditory">Auditory</option>
-      <option value="kinesthetic">Kinesthetic</option>
-    </select>
-
-    <select id="subject">
-      <option value="math">Math</option>
-      <option value="science">Science</option>
-      <option value="language">Language</option>
-      <option value="coding">Coding</option>
-    </select>
-
-    <select id="learningSpeed">
-      <option value="slow">Slow Learner</option>
-    </select>
-
-    <button type="submit">Start Learning</button>
-  </form>
-
-  <h2>📅 Study Planner</h2>
-  <input type="text" id="plannerSubject" placeholder="Subject">
-  <input type="number" id="plannerTime" placeholder="Minutes">
-  <button id="addPlannerBtn">Add</button>
-
-  <table id="plannerTable">
-    <thead><tr><th>Subject</th><th>Time</th><th>❌</th></tr></thead>
-    <tbody></tbody>
-  </table>
-
-  <p>Total Time: <span id="totalTime">0</span> mins</p>
-</section>
-
-<section class="container" id="dashboard">
-  <h2>Learning Materials</h2>
-  <div id="conceptContainer"></div>
-  <div id="lessonContainer"></div>
-  <button id="proceedQuizBtn">Proceed to Quiz</button>
-</section>
-
-<section class="container" id="quizSection">
-  <h2>Quiz Time</h2>
-  <div id="challengeContainer"></div>
-  <div id="progressBar"><div id="progressFill">0 pts</div></div>
-  <button id="gameBtn">Play Game</button>
-</section>
-
+  <div id="contentArea"></div>
 </div>
 
 <script src="app.js"></script>
