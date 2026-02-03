@@ -5,185 +5,37 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 <title>LearnBuddy Pro</title>
 <style>
-  html, body {
-    height: 100%;
-    width: 100%;
-    margin:0;
-    padding:0;
-    background:black;
-    color:white;
-    font-family:'Arial',sans-serif;
-  }
-  header {
-    background:#ff6b81;
-    color:white;
-    text-align:center;
-    padding:25px 0;
-    box-shadow:0 3px 8px rgba(255,255,255,0.2);
-  }
-  header h1 {
-    margin:0;
-    font-size:2em;
-  }
-  header p {
-    margin:5px 0 0 0;
-    font-size:1.1em;
-  }
-  .container {
-    max-width:950px;
-    margin:20px auto;
-    padding:20px;
-    border-radius:15px;
-    background:#111;
-    box-shadow:0 4px 20px rgba(255,255,255,0.1);
-  }
-  select,input,button {
-    padding:10px;
-    margin:5px 0 15px;
-    width:100%;
-    border-radius:8px;
-    border:1px solid #555;
-    font-size:1em;
-    background:#222;
-    color:white;
-  }
-  input::placeholder {
-    color:#ccc;
-  }
-  button {
-    background:#ff6b81;
-    color:white;
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
-    transition:0.3s;
-  }
-  button:hover {
-    background:#ff4757;
-  }
-  table {
-    width:100%;
-    border-collapse: collapse;
-    margin-top:10px;
-    color:white;
-  }
-  th, td {
-    border:1px solid #444;
-    padding:10px;
-    text-align:center;
-    border-radius:5px;
-  }
-  th {
-    background:#ff6b81;
-    color:white;
-  }
-  a {
-    color:#ff6b81;
-    text-decoration:none;
-    font-weight:bold;
-  }
-  a:hover {
-    color:#ff4757;
-  }
-  .card {
-    background:#222;
-    padding:15px;
-    margin:12px 0;
-    border-radius:12px;
-    box-shadow:0 2px 8px rgba(255,255,255,0.1);
-  }
-  .concept {
-    margin:8px 0;
-    padding:10px;
-    background:#333;
-    border-left:4px solid #ff6b81;
-    border-radius:5px;
-  }
-  .summary {
-    margin:5px 0;
-    font-style:italic;
-    color:#ccc;
-  }
-  #progressBar {
-    width:100%;
-    background-color:#444;
-    border-radius:8px;
-    margin:12px 0;
-  }
-  #progressBar div {
-    height:22px;
-    background-color:#ff6b81;
-    width:0%;
-    border-radius:8px;
-    text-align:center;
-    color:white;
-    line-height:22px;
-    font-weight:bold;
-  }
-  .dark-section {
-    background:#111;
-    color:white;
-    box-shadow:0 4px 15px rgba(255,255,255,0.1);
-  }
-  .dark-section a {
-    color:#ff6b81;
-  }
-  .dark-section a:hover {
-    color:#ff4757;
-  }
-  .dark-section .card {
-    background:#222;
-    color:white;
-  }
-  .dark-section .concept {
-    background:#333;
-    border-left:4px solid #ff6b81;
-  }
-  .dark-section .summary {
-    color:#ccc;
-  }
+  body {font-family:'Arial',sans-serif; margin:0; padding:0; background:#f0f2f5; color:#333;}
+  header {background:#ff6b81; color:white; text-align:center; padding:25px 0; box-shadow:0 3px 8px rgba(0,0,0,0.2);}
+  header h1 {margin:0; font-size:2em;}
+  header p {margin:5px 0 0 0; font-size:1.1em;}
+  .container {max-width:950px; margin:25px auto; padding:20px; border-radius:15px; background:white; box-shadow:0 4px 20px rgba(0,0,0,0.15);}
+  select,input,button {padding:10px; margin:5px 0 15px; width:100%; border-radius:8px; border:1px solid #ccc; font-size:1em;}
+  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
+  button {background:#ff6b81; color:white; border:none; cursor:pointer; font-weight:bold; transition:0.3s;}
+  button:hover {background:#ff4757;}
+  table {width:100%; border-collapse: collapse; margin-top:10px; color:#333;}
+  th, td {border:1px solid #ddd; padding:10px; text-align:center; border-radius:5px;}
+  th {background:#ff6b81; color:white;}
+  a {color:#ff6b81; text-decoration:none; font-weight:bold;}
+  a:hover {color:#ff4757;}
+  .card {background:#f9f9f9; padding:15px; margin:12px 0; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.1);}
+  .concept {margin:8px 0; padding:10px; background:#ffe6e6; border-left:4px solid #ff6b81; border-radius:5px;}
+  .summary {margin:5px 0; font-style:italic; color:#555;}
+  #progressBar {width:100%; background-color:#ddd; border-radius:8px; margin:12px 0;}
+  #progressBar div {height:22px; background-color:#ff6b81; width:0%; border-radius:8px; text-align:center; color:white; line-height:22px; font-weight:bold;}
+  .dark-section {background:#111; color:white; box-shadow:0 4px 15px rgba(255,255,255,0.1);}
+  .dark-section a {color:#ff6b81;}
+  .dark-section a:hover {color:#ff4757;}
+  .dark-section .card {background:#222; color:white;}
+  .dark-section .concept {background:#333; border-left:4px solid #ff6b81;}
+  .dark-section .summary {color:#ccc;}
   /* Welcome Page */
-  #welcomePageContainer {
-    background:black;
-    color:white;
-    height:100vh;
-    width:100vw;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    text-align:center;
-  }
-  #welcomePageContainer h1 {
-    font-size:3em;
-    color:gold;
-    text-shadow: 0 0 10px #fff, 0 0 20px #ff0, 0 0 30px #ff0;
-  }
-  #welcomePageContainer p {
-    margin:20px 0;
-    font-size:1.5em;
-  }
-  #welcomePageContainer input {
-    padding:10px;
-    font-size:1em;
-    border-radius:8px;
-    border:none;
-    width:200px;
-    text-align:center;
-    background:#222;
-    color:white;
-  }
-  #welcomePageContainer button {
-    margin-top:15px;
-    padding:10px 20px;
-    font-size:1em;
-    font-weight:bold;
-    border-radius:8px;
-    border:none;
-    background:gold;
-    color:black;
-    cursor:pointer;
-  }
+  #welcomePageContainer {background:black; color:white; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;}
+  #welcomePageContainer h1 {font-size:3em; color:gold; text-shadow: 0 0 10px #fff, 0 0 20px #ff0, 0 0 30px #ff0;}
+  #welcomePageContainer p {margin:20px 0; font-size:1.5em;}
+  #welcomePageContainer input {padding:10px; font-size:1em; border-radius:8px; border:none; width:200px; text-align:center;}
+  #welcomePageContainer button {margin-top:15px; padding:10px 20px; font-size:1em; font-weight:bold; border-radius:8px; border:none; background:gold; color:black; cursor:pointer;}
 </style>
 </head>
 <body>
@@ -199,8 +51,8 @@
 <!-- Main Content -->
 <div id="mainContent" style="display:none;">
 <header>
-  <h1>LearnBuddy Pro</h1>
-  <p>Set Up Your Profile & Study Planner</p>
+<h1>LearnBuddy Pro</h1>
+<p>Set Up Your Profile & Study Planner</p>
 </header>
 
 <div class="container" id="profilePlannerSection">
