@@ -1,38 +1,221 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>LearnBuddy Pro</title>
-  <link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>LearnBuddy Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:'Poppins',sans-serif}
+
+body{
+  background:linear-gradient(135deg,#0f2027,#203a43,#2c5364);
+  color:#fff;
+}
+
+/* HEADER */
+header{
+  text-align:center;
+  padding:20px;
+  background:rgba(0,0,0,0.4);
+  backdrop-filter:blur(10px);
+  position:sticky;top:0;
+}
+
+header h1{font-weight:600;font-size:2rem}
+header p{opacity:0.8}
+
+/* CONTAINER */
+.container{
+  max-width:1100px;
+  margin:25px auto;
+  padding:25px;
+  background:rgba(255,255,255,0.05);
+  border-radius:15px;
+  box-shadow:0 8px 25px rgba(0,0,0,0.4);
+}
+
+/* INPUTS */
+select,input,button{
+  width:100%;
+  padding:12px;
+  margin:10px 0;
+  border-radius:8px;
+  border:none;
+  font-size:1rem;
+}
+
+input,select{background:#1f2a33;color:#fff}
+input::placeholder{color:#aaa}
+
+button{
+  background:#ff6b81;
+  color:#fff;
+  font-weight:600;
+  cursor:pointer;
+  transition:.3s;
+}
+button:hover{transform:scale(1.03);background:#ff4757}
+
+/* TABLE */
+table{width:100%;margin-top:10px;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #555;text-align:center}
+th{background:#ff6b81}
+
+/* CARDS */
+.card{
+  background:#1c2833;
+  padding:15px;
+  border-radius:12px;
+  margin:12px 0;
+}
+
+.concept{
+  background:#2f3e46;
+  padding:10px;
+  margin:8px 0;
+  border-left:5px solid #ff6b81;
+  border-radius:6px;
+}
+
+/* PROGRESS */
+#progressBar{background:#333;border-radius:20px;margin:15px 0}
+#progressFill{height:20px;background:#ff6b81;width:0%;border-radius:20px;text-align:center}
+
+/* WELCOME */
+#welcomePageContainer{
+  height:100vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  align-items:center;
+  text-align:center;
+}
+#welcomePageContainer h1{font-size:2.5rem;color:gold}
+#welcomePageContainer input{width:250px}
+
+/* RESPONSIVE */
+@media(max-width:768px){
+  header h1{font-size:1.5rem}
+  .container{margin:10px}
+}
+</style>
 </head>
+
 <body>
 
-<!-- Welcome Page -->
-<div id="welcomePage" class="center-box">
-  <h1>Welcome to LearnBuddy Pro</h1>
-  <p>Enter your name to start learning</p>
-  <input type="text" id="username" placeholder="Your Name" />
-  <button id="startBtn">Start Learning</button>
-  <p id="errorMsg"></p>
+<div id="welcomePageContainer">
+  <h1>✨ LearnBuddy Pro ✨</h1>
+  <p>Enter your name to begin</p>
+  <input type="text" id="userNameInput" placeholder="Your Name" />
+  <button onclick="startApp()">Start Learning</button>
 </div>
 
-<!-- Dashboard -->
-<div id="dashboard" class="hidden">
-  <header>
-    <h2>Hello, <span id="displayName"></span> 👋</h2>
-    <p>Select a subject to begin</p>
-  </header>
+<div id="mainContent" style="display:none;">
+<header>
+  <h1>LearnBuddy Pro</h1>
+  <p>Your Smart Study Companion</p>
+</header>
 
-  <div class="card-container">
-    <div class="card" onclick="selectSubject('Math')">Math</div>
-    <div class="card" onclick="selectSubject('Science')">Science</div>
-    <div class="card" onclick="selectSubject('Coding')">Coding</div>
-  </div>
+<div class="container" id="profilePlannerSection">
+  <h2>Learning Profile</h2>
+  <form id="profileForm">
+    <label>Learning Style</label>
+    <select id="learningStyle">
+      <option value="visual">Visual</option>
+      <option value="auditory">Auditory</option>
+      <option value="kinesthetic">Kinesthetic</option>
+    </select>
 
-  <div id="contentArea"></div>
+    <label>Subject</label>
+    <select id="subject">
+      <option value="math">Math</option>
+      <option value="science">Science</option>
+      <option value="language">Language</option>
+      <option value="coding">Coding</option>
+    </select>
+
+    <label>Learning Speed</label>
+    <select id="learningSpeed">
+      <option value="slow">Slow Learner</option>
+      <option value="average">Average Learner</option>
+      <option value="topper">Topper</option>
+    </select>
+
+    <button type="submit">Start Learning</button>
+  </form>
 </div>
 
-<script src="app.js"></script>
+<div class="container" id="dashboard" style="display:none;">
+  <h2>Learning Materials</h2>
+  <div id="conceptContainer"></div>
+  <div id="lessonContainer"></div>
+  <button id="proceedQuizBtn">Proceed to Quiz</button>
+</div>
+
+<div class="container" id="quizSection" style="display:none;">
+  <h2>Quiz Time</h2>
+  <div id="challengeContainer"></div>
+  <div id="progressBar"><div id="progressFill"></div></div>
+</div>
+
+<script>
+let profile={},currentQuestion=0,points=0;
+
+const referenceMaterial={
+math:{slow:[{title:"Addition",summary:"Learn addition",concept:"Adding numbers gives sum",link:"#"}]},
+science:{slow:[{title:"Photosynthesis",summary:"Plants make food",concept:"Sunlight helps plants",link:"#"}]},
+language:{slow:[{title:"Grammar",summary:"Learn nouns & verbs",concept:"Verb is action",link:"#"}]},
+coding:{slow:[{title:"Programming",summary:"Intro to coding",concept:"Code gives instructions",link:"#"}]}
+};
+
+const challenges={math:[{q:"2+3=?",a:5}],science:[{q:"H2O formula?",a:"water"}],language:[{q:"Synonym of happy?",a:"joyful"}],coding:[{q:"Web scripting language?",a:"javascript"}]};
+
+function startApp(){
+ let name=document.getElementById('userNameInput').value;
+ if(!name){alert("Enter name");return;}
+ document.getElementById('welcomePageContainer').style.display="none";
+ document.getElementById('mainContent').style.display="block";
+}
+
+document.getElementById('profileForm').addEventListener('submit',e=>{
+ e.preventDefault();
+ profile={subject:subject.value,speed:learningSpeed.value};
+ document.getElementById('profilePlannerSection').style.display='none';
+ document.getElementById('dashboard').style.display='block';
+ showMaterials();
+});
+
+function showMaterials(){
+ const mat=referenceMaterial[profile.subject][profile.speed];
+ let c="<h3>Concepts</h3>";
+ mat.forEach(i=>c+=`<div class='concept'>${i.concept}</div>`);
+ conceptContainer.innerHTML=c;
+ let l="<div class='card'><ul>";
+ mat.forEach(i=>l+=`<li>${i.title} - ${i.summary}</li>`);
+ lessonContainer.innerHTML=l+"</ul></div>";
+}
+
+proceedQuizBtn.onclick=()=>{
+ dashboard.style.display='none';
+ quizSection.style.display='block';
+ showQuestion();
+}
+
+function showQuestion(){
+ let ch=challenges[profile.subject][currentQuestion];
+ challengeContainer.innerHTML=`<div class='card'>${ch.q}<input id='ans'><button onclick='checkAnswer()'>Submit</button></div>`;
+}
+
+function checkAnswer(){
+ let ans=document.getElementById('ans').value.toLowerCase();
+ let ch=challenges[profile.subject][currentQuestion];
+ if(ans==ch.a.toString())points+=10;
+ currentQuestion++;
+ progressFill.style.width=(points/10*100)+"%";
+}
+</script>
+
 </body>
 </html>
