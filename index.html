@@ -2,145 +2,932 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-<title>LearnBuddy Pro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Learn Buddy — Adaptive Learning</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600;9..144,700&family=Inter:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
-  /* General Body */
-  body {font-family:'Arial',sans-serif; margin:0; padding:0; background:#f5f5f5; color:#333;}
-  
-  /* Header */
-  header {background:#a3cef1; color:#1b262c; text-align:center; padding:25px 0; box-shadow:0 3px 8px rgba(0,0,0,0.1);}
-  header h1 {margin:0; font-size:2em;}
-  header p {margin:5px 0 0 0; font-size:1.1em;}
+  :root {
+    --ink: #1B2A4A;
+    --bg: #10192E;
+    --bg-soft: #16223D;
+    --bg-soft2: #1a2846;
+    --gold: #E8B04B;
+    --paper: #FAF6EF;
+    --sage: #7FA98D;
+    --red: #e07a7a;
+    --line: rgba(250, 246, 239, 0.14);
+  }
 
-  /* Container */
-  .container {max-width:950px; margin:25px auto; padding:20px; border-radius:15px; background:white; box-shadow:0 4px 20px rgba(0,0,0,0.08);}
-  
-  /* Form Inputs */
-  select,input,button {padding:10px; margin:5px 0 15px; width:100%; border-radius:8px; border:1px solid #ccc; font-size:1em;}
-  input[type=number]::-webkit-inner-spin-button, input[type=number]::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
-  button {background:#a3cef1; color:#1b262c; border:none; cursor:pointer; font-weight:bold; transition:0.3s;}
-  button:hover {background:#70a1d7;}
-  
-  /* Table */
-  table {width:100%; border-collapse: collapse; margin-top:10px; color:#333;}
-  th, td {border:1px solid #ddd; padding:10px; text-align:center; border-radius:5px;}
-  th {background:#a3cef1; color:#1b262c;}
-  a {color:#70a1d7; text-decoration:none; font-weight:bold;}
-  a:hover {color:#386fa4;}
-  
-  /* Cards & Concepts */
-  .card {background:#f0f4f8; padding:15px; margin:12px 0; border-radius:12px; box-shadow:0 2px 8px rgba(0,0,0,0.05);}
-  .concept {margin:8px 0; padding:10px; background:#d4f0fc; border-left:4px solid #70a1d7; border-radius:5px;}
-  .summary {margin:5px 0; font-style:italic; color:#555;}
-  
-  /* Progress Bar */
-  #progressBar {width:100%; background-color:#ddd; border-radius:8px; margin:12px 0;}
-  #progressBar div {height:22px; background-color:#70a1d7; width:0%; border-radius:8px; text-align:center; color:white; line-height:22px; font-weight:bold;}
+  * { box-sizing: border-box; }
 
-  /* Dark Section (Dashboard / Quiz) */
-  .dark-section {background:#e3f2fd; color:#1b262c; box-shadow:0 4px 15px rgba(0,0,0,0.05);}
-  .dark-section a {color:#386fa4;}
-  .dark-section a:hover {color:#27496d;}
-  .dark-section .card {background:#f0f4f8; color:#1b262c;}
-  .dark-section .concept {background:#cfe0fc; border-left:4px solid #70a1d7;}
-  .dark-section .summary {color:#555;}
+  body {
+    margin: 0;
+    min-height: 100vh;
+    background:
+      radial-gradient(circle at 20% -10%, rgba(232,176,75,0.10), transparent 45%),
+      radial-gradient(circle at 100% 10%, rgba(127,169,141,0.10), transparent 40%),
+      var(--bg);
+    color: var(--paper);
+    font-family: 'Inter', sans-serif;
+    padding: 24px;
+  }
 
-  /* Welcome Page */
-  #welcomePageContainer {background:#d4f0fc; color:#1b262c; height:100vh; display:flex; flex-direction:column; justify-content:center; align-items:center; text-align:center;}
-  #welcomePageContainer h1 {font-size:3em; color:#386fa4; text-shadow: 0 0 5px #fff, 0 0 10px #cce7ff;}
-  #welcomePageContainer p {margin:20px 0; font-size:1.5em;}
-  #welcomePageContainer input {padding:10px; font-size:1em; border-radius:8px; border:1px solid #ccc; width:200px; text-align:center;}
-  #welcomePageContainer button {margin-top:15px; padding:10px 20px; font-size:1em; font-weight:bold; border-radius:8px; border:none; background:#70a1d7; color:white; cursor:pointer;}
-  #welcomePageContainer button:hover {background:#386fa4;}
+  .hidden { display: none !important; }
+
+  .label {
+    font-family: 'IBM Plex Mono', monospace;
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--gold);
+  }
+
+  button { font-family: 'Inter', sans-serif; cursor: pointer; }
+
+  /* ---------- Welcome screen ---------- */
+  #welcomePage {
+    width: 100%;
+    max-width: 420px;
+    margin: 6vh auto;
+    background: var(--bg-soft);
+    border: 1px solid var(--line);
+    border-radius: 18px;
+    padding: 40px 32px;
+    text-align: center;
+    box-shadow: 0 30px 60px -25px rgba(0,0,0,0.6);
+  }
+
+  #welcomePage .label { display: block; margin-bottom: 10px; }
+  #welcomePage h1 { font-family: 'Fraunces', serif; font-size: 32px; font-weight: 600; margin: 0 0 8px; }
+  #welcomePage p.sub { color: rgba(250,246,239,0.65); font-size: 14.5px; margin: 0 0 28px; }
+
+  #username {
+    width: 100%; padding: 13px 16px; border-radius: 10px;
+    border: 1px solid var(--line); background: rgba(250,246,239,0.05);
+    color: var(--paper); font-size: 15px; outline: none;
+    transition: border-color 0.2s ease, background 0.2s ease;
+  }
+  #username::placeholder { color: rgba(250,246,239,0.4); }
+  #username:focus { border-color: var(--gold); background: rgba(250,246,239,0.08); }
+
+  #errorMsg { min-height: 18px; font-size: 13px; margin-top: 10px; text-align: left; color: var(--red); }
+
+  #startBtn {
+    margin-top: 22px; width: 100%; padding: 13px 16px; border: none; border-radius: 10px;
+    background: var(--gold); color: #1B2A4A; font-weight: 600; font-size: 15px;
+    transition: transform 0.15s ease, background 0.15s ease;
+  }
+  #startBtn:hover { background: #f0bd63; transform: translateY(-1px); }
+
+  /* ---------- Dashboard shell ---------- */
+  #dashboard { width: 100%; max-width: 800px; margin: 0 auto; }
+
+  #dashboard .top {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 22px; flex-wrap: wrap; gap: 8px;
+  }
+  #dashboard h1 { font-family: 'Fraunces', serif; font-weight: 600; font-size: 26px; margin: 4px 0 0; }
+  #dashboard h1 span { color: var(--gold); }
+
+  .tabs { display: flex; gap: 6px; margin-bottom: 26px; border-bottom: 1px solid var(--line); }
+  .tab-btn {
+    background: none; border: none; color: rgba(250,246,239,0.55);
+    font-size: 14px; font-weight: 600; padding: 10px 6px; margin-right: 18px;
+    border-bottom: 2px solid transparent; transition: color 0.15s ease, border-color 0.15s ease;
+  }
+  .tab-btn:hover { color: var(--paper); }
+  .tab-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* ---------- Learn tab: subject trail ---------- */
+  .trail { position: relative; display: flex; justify-content: space-between; gap: 16px; margin-bottom: 28px; }
+  .trail::before {
+    content: ""; position: absolute; top: 34px; left: 8%; right: 8%; height: 1px;
+    background-image: linear-gradient(to right, var(--line) 50%, transparent 0%);
+    background-size: 12px 1px; z-index: 0;
+  }
+  .subject-node {
+    position: relative; z-index: 1; flex: 1; background: var(--bg-soft);
+    border: 1px solid var(--line); border-radius: 14px; padding: 20px 14px; text-align: center;
+    color: var(--paper); transition: border-color 0.2s ease, transform 0.15s ease, background 0.2s ease;
+  }
+  .subject-node .icon {
+    width: 40px; height: 40px; margin: 0 auto 10px; border-radius: 50%;
+    background: rgba(232,176,75,0.12); color: var(--gold); display: flex; align-items: center;
+    justify-content: center; font-family: 'IBM Plex Mono', monospace; font-size: 13px;
+    border: 1px solid rgba(232,176,75,0.3);
+  }
+  .subject-node .name { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; }
+  .subject-node .stars { font-size: 12px; color: var(--gold); margin-top: 6px; letter-spacing: 1px; }
+  .subject-node:hover { border-color: var(--gold); transform: translateY(-3px); background: var(--bg-soft2); }
+  .subject-node.active { border-color: var(--sage); background: rgba(127,169,141,0.1); }
+
+  #contentPanel {
+    background: var(--paper); color: var(--ink); border-radius: 16px; padding: 28px 30px;
+    min-height: 120px; box-shadow: 0 30px 60px -25px rgba(0,0,0,0.5);
+  }
+  #contentPanel .label { color: #B98A2F; }
+  #lessonText { font-family: 'Fraunces', serif; font-size: 18px; line-height: 1.55; margin: 10px 0 20px; }
+
+  .topics-wrap { display: flex; flex-direction: column; gap: 14px; margin: 14px 0 22px; }
+
+  .topic-pick-card {
+    display: flex; align-items: center; justify-content: space-between; gap: 12px;
+    border: 1px solid rgba(27,42,74,0.14); border-radius: 12px; padding: 16px 18px;
+    background: rgba(27,42,74,0.03); cursor: pointer;
+    transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+  }
+  .topic-pick-card:hover { border-color: var(--ink); background: rgba(27,42,74,0.06); transform: translateX(2px); }
+  .topic-pick-card .tp-left h3 { font-family: 'Fraunces', serif; font-size: 16px; font-weight: 600; margin: 0 0 4px; }
+  .topic-pick-card .tp-left p { font-size: 13px; margin: 0; color: rgba(27,42,74,0.55); }
+  .topic-pick-card .tp-right { text-align: right; white-space: nowrap; }
+  .topic-pick-card .tp-stars { color: #B98A2F; font-size: 13px; letter-spacing: 2px; display: block; }
+  .topic-pick-card .tp-arrow { color: rgba(27,42,74,0.35); font-size: 18px; }
+
+  .back-btn {
+    display: inline-flex; align-items: center; gap: 6px; border: none; background: none;
+    color: rgba(27,42,74,0.6); font-size: 13.5px; font-weight: 600; padding: 0 0 14px; cursor: pointer;
+  }
+  .back-btn:hover { color: var(--ink); }
+
+  .topic-card {
+    border: 1px solid rgba(27,42,74,0.14); border-radius: 12px; padding: 16px 18px;
+    background: rgba(27,42,74,0.03);
+  }
+  .topic-card h3 {
+    font-family: 'Fraunces', serif; font-size: 16.5px; font-weight: 600; margin: 0 0 8px;
+  }
+  .topic-card p {
+    font-size: 14.5px; line-height: 1.6; margin: 0 0 10px; color: rgba(27,42,74,0.85);
+  }
+  .yt-link {
+    display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600;
+    color: #B91C1C; text-decoration: none; border: 1px solid rgba(185,28,28,0.25);
+    padding: 6px 12px; border-radius: 7px; transition: background 0.15s ease;
+  }
+  .yt-link:hover { background: rgba(185,28,28,0.08); }
+
+  .test-divider {
+    display: flex; align-items: center; gap: 12px; margin: 26px 0 14px;
+    color: rgba(27,42,74,0.45); font-family: 'IBM Plex Mono', monospace; font-size: 12px;
+    text-transform: uppercase; letter-spacing: 0.1em;
+  }
+  .test-divider::before, .test-divider::after { content: ""; flex: 1; height: 1px; background: rgba(27,42,74,0.15); }
+
+  .level-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 6px; }
+  .level-btn {
+    border: 1px solid rgba(27,42,74,0.2); background: transparent; color: var(--ink);
+    padding: 9px 14px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+    transition: background 0.15s ease, color 0.15s ease;
+  }
+  .level-btn:hover { background: rgba(27,42,74,0.06); }
+  .level-btn.active { background: var(--ink); color: var(--paper); }
+
+  .quiz-q { margin: 18px 0; }
+  .quiz-q p { font-weight: 600; margin: 0 0 8px; font-size: 15px; }
+  .quiz-q label {
+    display: block; padding: 8px 10px; border-radius: 8px; font-size: 14.5px;
+    cursor: pointer; transition: background 0.15s ease;
+  }
+  .quiz-q label:hover { background: rgba(27,42,74,0.06); }
+  .quiz-q input { margin-right: 8px; }
+
+  .submit-quiz-btn {
+    margin-top: 8px; border: none; background: var(--ink); color: var(--paper);
+    padding: 11px 18px; border-radius: 8px; font-weight: 600; font-size: 14.5px;
+  }
+  .submit-quiz-btn:hover { background: #26365c; }
+
+  .quiz-result { margin-top: 16px; padding: 14px 16px; border-radius: 10px; background: rgba(127,169,141,0.15); font-size: 14.5px; }
+  .quiz-result .stars-earned { color: #B98A2F; font-size: 18px; letter-spacing: 2px; margin-top: 4px; }
+
+  /* ---------- Planner tab ---------- */
+  .planner-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  @media (max-width: 640px) { .planner-grid { grid-template-columns: 1fr; } }
+
+  .card {
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: 14px; padding: 22px;
+  }
+  .card h2 { font-family: 'Fraunces', serif; font-size: 17px; font-weight: 600; margin: 6px 0 16px; }
+
+  .target-row { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  .target-row input {
+    width: 80px; padding: 9px 10px; border-radius: 8px; border: 1px solid var(--line);
+    background: rgba(250,246,239,0.05); color: var(--paper); font-size: 14.5px; outline: none;
+  }
+  .target-row input:focus { border-color: var(--gold); }
+  .target-row button {
+    border: none; background: var(--gold); color: var(--ink); padding: 9px 14px;
+    border-radius: 8px; font-weight: 600; font-size: 13.5px;
+  }
+
+  .progress-track {
+    width: 100%; height: 8px; border-radius: 6px; background: rgba(250,246,239,0.08); overflow: hidden;
+  }
+  .progress-fill { height: 100%; background: var(--sage); width: 0%; transition: width 0.3s ease; }
+  .progress-caption { font-size: 12.5px; color: rgba(250,246,239,0.6); margin-top: 8px; }
+
+  .timer-display {
+    font-family: 'IBM Plex Mono', monospace; font-size: 38px; letter-spacing: 2px;
+    text-align: center; margin: 6px 0 18px; color: var(--gold);
+  }
+  .timer-btns { display: flex; gap: 8px; }
+  .timer-btns button {
+    flex: 1; border: 1px solid var(--line); background: transparent; color: var(--paper);
+    padding: 10px; border-radius: 8px; font-size: 13.5px; font-weight: 600;
+  }
+  .timer-btns button.primary { background: var(--gold); color: var(--ink); border: none; }
+  .timer-btns button:hover { background: var(--bg-soft2); }
+  .timer-btns button.primary:hover { background: #f0bd63; }
+
+  .todo-input-row { display: flex; gap: 8px; margin-bottom: 14px; }
+  .todo-input-row input {
+    flex: 1; padding: 10px 12px; border-radius: 8px; border: 1px solid var(--line);
+    background: rgba(250,246,239,0.05); color: var(--paper); font-size: 14px; outline: none;
+  }
+  .todo-input-row input:focus { border-color: var(--gold); }
+  .todo-input-row button {
+    border: none; background: var(--gold); color: var(--ink); padding: 0 16px;
+    border-radius: 8px; font-weight: 600; font-size: 14px;
+  }
+
+  #todoList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; max-height: 220px; overflow-y: auto; }
+  #todoList li {
+    display: flex; align-items: center; gap: 10px; background: rgba(250,246,239,0.04);
+    border: 1px solid var(--line); border-radius: 8px; padding: 9px 10px; font-size: 14px;
+  }
+  #todoList li span { flex: 1; }
+  #todoList li.done span { text-decoration: line-through; color: rgba(250,246,239,0.4); }
+  #todoList li button {
+    border: none; background: transparent; color: var(--red); font-size: 15px; padding: 2px 6px;
+  }
+  #todoList .empty { color: rgba(250,246,239,0.4); font-size: 13.5px; text-align: center; padding: 10px 0; border: none; background: none; }
+
+  /* ---------- Progress tab ---------- */
+  .rank-hero { text-align: center; padding: 30px 20px; }
+  .rank-hero .stars-big { font-size: 34px; color: var(--gold); letter-spacing: 4px; margin-bottom: 10px; }
+  .rank-hero h2 { font-family: 'Fraunces', serif; font-size: 26px; margin: 0 0 6px; }
+  .rank-hero p { color: rgba(250,246,239,0.6); font-size: 14px; margin: 0; }
+
+  .subject-progress { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+  .subject-progress-row {
+    display: flex; align-items: center; justify-content: space-between;
+    background: var(--bg-soft); border: 1px solid var(--line); border-radius: 10px; padding: 12px 16px;
+  }
+  .subject-progress-row .name { font-weight: 600; font-size: 14.5px; }
+  .subject-progress-row .stars { color: var(--gold); letter-spacing: 2px; }
 </style>
 </head>
 <body>
 
-<!-- Welcome Page -->
-<div id="welcomePageContainer">
-  <h1>✨ WELCOME! ✨</h1>
-  <p>Enter your name to start learning:</p>
-  <input type="text" id="userNameInput" placeholder="Your Name" />
-  <button onclick="startApp()">Start</button>
-</div>
-
-<!-- Main Content -->
-<div id="mainContent" style="display:none;">
-<header>
-<h1>LearnBuddy Pro</h1>
-<p>Set Up Your Profile & Study Planner</p>
-</header>
-
-<div class="container" id="profilePlannerSection">
-  <h2>Set Up Your Learning Profile</h2>
-  <form id="profileForm">
-    <label>Learning Style:</label>
-    <select id="learningStyle" required>
-      <option value="visual">Visual</option>
-      <option value="auditory">Auditory</option>
-      <option value="kinesthetic">Kinesthetic</option>
-    </select>
-
-    <label>Subject:</label>
-    <select id="subject" required>
-      <option value="math">Math</option>
-      <option value="science">Science</option>
-      <option value="language">Language</option>
-      <option value="coding">Coding</option>
-    </select>
-
-    <label>Learning Speed:</label>
-    <select id="learningSpeed" required>
-      <option value="slow">Slow Learner</option>
-      <option value="average">Average Learner</option>
-      <option value="topper">Topper</option>
-    </select>
-
-    <button type="submit">Start Learning</button>
-  </form>
-
-  <h2>📅 Study Planner (Set Time in Minutes)</h2>
-  <div id="plannerFormContainer">
-    <div class="subject-time-entry">
-      <input type="text" class="plannerSubject" placeholder="Subject / Topic Name">
-      <input type="number" class="plannerTime" placeholder="Time (minutes)">
-      <button type="button" onclick="addPlannerEntry(this)">Add</button>
-    </div>
+  <!-- WELCOME SCREEN -->
+  <div id="welcomePage">
+    <span class="label">Learn Buddy</span>
+    <h1>What should we call you?</h1>
+    <p class="sub">Your dashboard adapts as you learn.</p>
+    <input type="text" id="username" placeholder="Enter your name" autocomplete="off" />
+    <div id="errorMsg"></div>
+    <button id="startBtn">Start learning</button>
   </div>
-  <button onclick="savePlanner()">💾 Save Planner</button>
-  <p id="plannerStatus"></p>
 
-  <h3>Your Daily Study Plan</h3>
-  <table id="plannerTable">
-    <thead><tr><th>Subject / Topic</th><th>Time (minutes)</th><th>Action</th></tr></thead>
-    <tbody></tbody>
-  </table>
-</div>
+  <!-- DASHBOARD -->
+  <div id="dashboard" class="hidden">
+    <div class="top">
+      <div>
+        <span class="label">Dashboard</span>
+        <h1>Welcome back, <span id="displayName"></span></h1>
+      </div>
+    </div>
 
-<div class="container dark-section" id="dashboard" style="display:none;">
-  <h2>Your Learning Materials</h2>
-  <div id="conceptContainer"></div>
-  <div id="lessonContainer"></div>
-  <p>Total Planned Time: <span id="totalTime">0</span> minutes</p>
-  <button id="proceedQuizBtn">✅ Proceed to Quiz</button>
-</div>
+    <div class="tabs">
+      <button class="tab-btn active" data-tab="learn" onclick="showTab('learn')">Learn</button>
+      <button class="tab-btn" data-tab="planner" onclick="showTab('planner')">Planner</button>
+      <button class="tab-btn" data-tab="progress" onclick="showTab('progress')">Progress</button>
+    </div>
 
-<div class="container dark-section" id="quizSection" style="display:none;">
-  <h2>Quiz Time!</h2>
-  <div id="challengeContainer"></div>
-  <div id="progressBar"><div id="progressFill">0 pts</div></div>
-  <p id="badgeDisplay"></p>
-  <button onclick="playGame()">🎮 Play Quick Game</button>
-</div>
+    <!-- LEARN TAB -->
+    <section id="tab-learn">
+      <div class="trail">
+        <div class="subject-node" id="node-Math" onclick="selectSubject('Math', this)">
+          <div class="icon">01</div>
+          <div class="name">Math</div>
+          <div class="stars" id="stars-Math">0/12 ★</div>
+        </div>
+        <div class="subject-node" id="node-Science" onclick="selectSubject('Science', this)">
+          <div class="icon">02</div>
+          <div class="name">Science</div>
+          <div class="stars" id="stars-Science">0/12 ★</div>
+        </div>
+        <div class="subject-node" id="node-Coding" onclick="selectSubject('Coding', this)">
+          <div class="icon">03</div>
+          <div class="name">Coding</div>
+          <div class="stars" id="stars-Coding">0/12 ★</div>
+        </div>
+      </div>
+
+      <div id="contentPanel">
+        <span class="label" id="panelLabel">Lesson</span>
+        <div id="panelBody">
+          <p style="font-family:'Inter',sans-serif;font-size:14.5px;color:rgba(27,42,74,0.5);margin-top:10px;">
+            Pick a subject above to see the full syllabus, watch topic videos, then take the test.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLANNER TAB -->
+    <section id="tab-planner" class="hidden">
+      <div class="planner-grid">
+        <div class="card">
+          <h2>Target study hours</h2>
+          <div class="target-row">
+            <input type="number" id="targetHoursInput" min="0" step="0.5" placeholder="e.g. 2" />
+            <button onclick="setTargetHours()">Set goal</button>
+          </div>
+          <div class="progress-track"><div class="progress-fill" id="progressFill"></div></div>
+          <div class="progress-caption" id="progressCaption">No goal set yet.</div>
+
+          <h2 style="margin-top:26px;">Study timer</h2>
+          <div class="timer-display" id="timerDisplay">00:00:00</div>
+          <div class="timer-btns">
+            <button class="primary" id="timerToggleBtn" onclick="toggleTimer()">Start</button>
+            <button onclick="resetTimer()">Reset</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <h2>To-do planner</h2>
+          <div class="todo-input-row">
+            <input type="text" id="todoInput" placeholder="Add a task..." />
+            <button onclick="addTodo()">Add</button>
+          </div>
+          <ul id="todoList"></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- PROGRESS TAB -->
+    <section id="tab-progress" class="hidden">
+      <div class="card rank-hero">
+        <div class="stars-big" id="totalStarsDisplay">0 / 36 ★</div>
+        <h2 id="rankTitle">Just Starting</h2>
+        <p id="rankSub">Complete quizzes to earn stars and level up your rank.</p>
+      </div>
+
+      <div class="subject-progress">
+        <div class="subject-progress-row"><span class="name">Math</span><span class="stars" id="progress-Math">0/12 ★</span></div>
+        <div class="subject-progress-row"><span class="name">Science</span><span class="stars" id="progress-Science">0/12 ★</span></div>
+        <div class="subject-progress-row"><span class="name">Coding</span><span class="stars" id="progress-Coding">0/12 ★</span></div>
+      </div>
+    </section>
+  </div>
 
 <script>
-// JS remains unchanged (your logic)
-let profile={}, currentQuestion=0, points=0, studentName="";
-const referenceMaterial = { /* ... same as your code ... */ };
-const challenges = { /* ... same as your code ... */ };
-// rest of your JS remains unchanged
-</script>
+/* ===================== WELCOME SCREEN ===================== */
+document.addEventListener("DOMContentLoaded", function () {
+  const startBtn = document.getElementById("startBtn");
+  const usernameInput = document.getElementById("username");
 
+  function handleStart() {
+    const name = usernameInput.value.trim();
+    const errorMsg = document.getElementById("errorMsg");
+    if (name === "") {
+      errorMsg.innerText = "Please enter your name";
+      return;
+    }
+    errorMsg.innerText = "";
+    document.getElementById("displayName").innerText = name;
+    document.getElementById("welcomePage").classList.add("hidden");
+    document.getElementById("dashboard").classList.remove("hidden");
+  }
+
+  startBtn.addEventListener("click", handleStart);
+  usernameInput.addEventListener("keydown", function (e) {
+    if (e.key === "Enter") handleStart();
+  });
+
+  document.getElementById("todoInput").addEventListener("keydown", function (e) {
+    if (e.key === "Enter") addTodo();
+  });
+});
+
+/* ===================== TAB SWITCHING ===================== */
+function showTab(tab) {
+  ["learn", "planner", "progress"].forEach(t => {
+    document.getElementById("tab-" + t).classList.toggle("hidden", t !== tab);
+  });
+  document.querySelectorAll(".tab-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.tab === tab);
+  });
+  if (tab === "progress") renderProgressTab();
+}
+
+/* ===================== COURSE CONTENT + QUIZZES ===================== */
+function ytSearchUrl(query) {
+  return "https://www.youtube.com/results?search_query=" + encodeURIComponent(query);
+}
+
+const courseContent = {
+  Math: {
+    topics: [
+      {
+        title: "1. Number Sense & Arithmetic",
+        content: "Every branch of math builds on the four basic operations: addition, subtraction, multiplication, and division. Number sense means being able to estimate and check whether an answer is reasonable, not just calculate it. Practice mental math with small numbers before moving to larger ones — it builds the speed you'll need later.",
+        ytQuery: "basic arithmetic addition subtraction multiplication division tutorial",
+        questions: {
+          slow: [
+            { q: "What is 5 + 7?", options: ["10", "11", "12", "13"], answer: 2 },
+            { q: "What is 9 - 4?", options: ["3", "4", "5", "6"], answer: 2 }
+          ],
+          average: [
+            { q: "What is 12 × 8?", options: ["84", "92", "96", "104"], answer: 2 },
+            { q: "What is 144 ÷ 12?", options: ["10", "11", "12", "14"], answer: 2 }
+          ],
+          brilliant: [
+            { q: "289 × 31 is closest to which estimate?", options: ["6000", "7000", "9000", "12000"], answer: 2 },
+            { q: "What is 7! (7 factorial)?", options: ["5040", "720", "2520", "40320"], answer: 0 }
+          ]
+        }
+      },
+      {
+        title: "2. Fractions, Decimals & Percentages",
+        content: "Fractions, decimals, and percentages are three ways of describing the same idea: a part of a whole. 1/2 = 0.5 = 50%. To convert a fraction to a percentage, divide the numerator by the denominator and multiply by 100. This skill shows up constantly in real life — discounts, exam scores, statistics.",
+        ytQuery: "fractions decimals percentages explained",
+        questions: {
+          slow: [
+            { q: "What is 1/2 as a decimal?", options: ["0.2", "0.5", "0.25", "0.75"], answer: 1 },
+            { q: "Which is bigger: 1/4 or 1/2?", options: ["1/4", "1/2", "They're equal", "Cannot tell"], answer: 1 }
+          ],
+          average: [
+            { q: "What is 15% of 200?", options: ["15", "20", "30", "45"], answer: 2 },
+            { q: "Simplify 8/12.", options: ["1/2", "2/3", "3/4", "4/5"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "Convert 5/8 to a percentage.", options: ["55.5%", "62.5%", "58%", "60%"], answer: 1 },
+            { q: "A price rises 20%, then falls 20%. What's the net change?", options: ["0%", "-4%", "+4%", "-2%"], answer: 1 }
+          ]
+        }
+      },
+      {
+        title: "3. Basic Algebra",
+        content: "Algebra uses letters (like x) to represent unknown numbers. Solving an equation means isolating that letter using inverse operations — if a number is added, subtract it from both sides; if multiplied, divide both sides. For example, in 2x + 3 = 11, subtract 3 from both sides, then divide by 2, to get x = 4.",
+        ytQuery: "basic algebra solving equations for beginners",
+        questions: {
+          slow: [
+            { q: "Solve for x: x + 3 = 7", options: ["3", "4", "5", "10"], answer: 1 },
+            { q: "Solve for x: x - 2 = 6", options: ["4", "6", "8", "10"], answer: 2 }
+          ],
+          average: [
+            { q: "Solve for x: 2x = 10", options: ["3", "4", "5", "20"], answer: 2 },
+            { q: "Solve for x: 3x + 1 = 13", options: ["3", "4", "5", "6"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "Solve for x: 2x + 3 = 11", options: ["3", "4", "5", "6"], answer: 1 },
+            { q: "What is x² if x = -4?", options: ["-16", "8", "16", "-8"], answer: 2 }
+          ]
+        }
+      },
+      {
+        title: "4. Geometry Basics",
+        content: "Geometry deals with shapes, sizes, and space. Know the core formulas: area of a rectangle = length × width, area of a circle = π × radius², and perimeter is the total distance around a shape. Drawing the shape out and labeling known values is the fastest way to avoid mistakes.",
+        ytQuery: "geometry basics area perimeter formulas",
+        questions: {
+          slow: [
+            { q: "How many sides does a triangle have?", options: ["2", "3", "4", "5"], answer: 1 },
+            { q: "Perimeter of a square with side 4?", options: ["8", "12", "16", "20"], answer: 2 }
+          ],
+          average: [
+            { q: "Area of a rectangle 5 × 4?", options: ["9", "20", "18", "24"], answer: 1 },
+            { q: "The angles in a triangle sum to?", options: ["90°", "180°", "270°", "360°"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "Area of a circle, radius 7 (use π ≈ 22/7)?", options: ["154", "144", "132", "160"], answer: 0 },
+            { q: "A right triangle has legs 3 and 4. What is the hypotenuse?", options: ["5", "6", "7", "8"], answer: 0 }
+          ]
+        }
+      }
+    ]
+  },
+  Science: {
+    topics: [
+      {
+        title: "1. Living World & Photosynthesis",
+        content: "Plants make their own food through photosynthesis: using sunlight, water, and carbon dioxide, they produce glucose (energy) and release oxygen as a byproduct. This is why plants are called 'producers' — nearly every food chain on Earth starts with them.",
+        ytQuery: "photosynthesis explained for beginners",
+        questions: {
+          slow: [
+            { q: "What is the process plants use to make food called?", options: ["Respiration", "Photosynthesis", "Digestion", "Evaporation"], answer: 1 },
+            { q: "What gas do plants release during photosynthesis?", options: ["Carbon dioxide", "Oxygen", "Nitrogen", "Helium"], answer: 1 }
+          ],
+          average: [
+            { q: "Besides sunlight and CO2, what do plants absorb from soil for photosynthesis?", options: ["Water", "Salt", "Sugar", "Protein"], answer: 0 },
+            { q: "What is the green pigment that captures light called?", options: ["Melanin", "Chlorophyll", "Hemoglobin", "Keratin"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "Photosynthesis mainly occurs in which cell structure?", options: ["Mitochondria", "Nucleus", "Chloroplast", "Ribosome"], answer: 2 },
+            { q: "Photosynthesis converts light energy into what form of energy?", options: ["Heat", "Chemical", "Sound", "Nuclear"], answer: 1 }
+          ]
+        }
+      },
+      {
+        title: "2. Matter & States of Matter",
+        content: "Matter is anything that has mass and takes up space. It exists mainly as solid, liquid, or gas, depending on how tightly its particles are packed and how much energy they have. Heating a substance usually moves it from solid → liquid → gas (ice → water → steam is the classic example).",
+        ytQuery: "states of matter solid liquid gas explained",
+        questions: {
+          slow: [
+            { q: "Ice is which state of matter?", options: ["Solid", "Liquid", "Gas", "Plasma"], answer: 0 },
+            { q: "Water boils at what temperature (°C) at sea level?", options: ["50°C", "80°C", "100°C", "120°C"], answer: 2 }
+          ],
+          average: [
+            { q: "A liquid turning into a gas is called?", options: ["Freezing", "Melting", "Evaporation", "Condensation"], answer: 2 },
+            { q: "A gas turning into a liquid is called?", options: ["Freezing", "Melting", "Evaporation", "Condensation"], answer: 3 }
+          ],
+          brilliant: [
+            { q: "Which state has particles in a fixed, tightly packed arrangement?", options: ["Gas", "Liquid", "Solid", "Plasma"], answer: 2 },
+            { q: "Sublimation is the direct change from...", options: ["Solid to gas", "Liquid to gas", "Gas to liquid", "Solid to liquid"], answer: 0 }
+          ]
+        }
+      },
+      {
+        title: "3. Force, Motion & Energy",
+        content: "A force is a push or pull that can change an object's speed or direction. Gravity is the force pulling everything toward Earth. Energy is never created or destroyed, only transformed — a swinging pendulum converts potential energy (height) into kinetic energy (motion) and back again.",
+        ytQuery: "force motion and energy basics physics",
+        questions: {
+          slow: [
+            { q: "What force pulls objects toward Earth?", options: ["Friction", "Magnetism", "Gravity", "Tension"], answer: 2 },
+            { q: "A push or pull is called a...", options: ["Force", "Energy", "Mass", "Speed"], answer: 0 }
+          ],
+          average: [
+            { q: "What is the SI unit of force?", options: ["Joule", "Newton", "Watt", "Pascal"], answer: 1 },
+            { q: "The energy of motion is called?", options: ["Potential", "Kinetic", "Thermal", "Chemical"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "Newton's second law relates force, mass, and what else?", options: ["Velocity", "Acceleration", "Distance", "Time"], answer: 1 },
+            { q: "What is the SI unit of energy?", options: ["Watt", "Newton", "Joule", "Pascal"], answer: 2 }
+          ]
+        }
+      },
+      {
+        title: "4. Atoms & Basic Chemistry",
+        content: "Everything is made of atoms, which have a nucleus (protons + neutrons) surrounded by electrons. Protons are positive, electrons are negative, and neutrons have no charge. Chemical reactions happen when atoms rearrange their bonds — the atoms themselves don't disappear, they just recombine.",
+        ytQuery: "atoms basic chemistry structure explained",
+        questions: {
+          slow: [
+            { q: "What is the smallest unit of matter called?", options: ["Molecule", "Atom", "Cell", "Electron"], answer: 1 },
+            { q: "What is the chemical symbol for water?", options: ["O2", "H2O", "CO2", "NaCl"], answer: 1 }
+          ],
+          average: [
+            { q: "Which particle has a negative charge?", options: ["Proton", "Neutron", "Electron", "Nucleus"], answer: 2 },
+            { q: "Which particle has no charge?", options: ["Proton", "Neutron", "Electron", "Nucleus"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "Atoms combining to form a new substance is called a...", options: ["Physical change", "Chemical reaction", "Mixture", "Solution"], answer: 1 },
+            { q: "Protons and neutrons are found in the...", options: ["Electron cloud", "Nucleus", "Shell", "Orbit"], answer: 1 }
+          ]
+        }
+      }
+    ]
+  },
+  Coding: {
+    topics: [
+      {
+        title: "1. What is Programming? Variables & Data Types",
+        content: "Programming is giving a computer step-by-step instructions. A variable is a named container that stores a value — like `let score = 0;`. Common data types are strings (text), numbers, booleans (true/false), and arrays (lists of values). Picking the right data type keeps your logic predictable.",
+        ytQuery: "programming basics variables data types for beginners",
+        questions: {
+          slow: [
+            { q: "A variable is used to...", options: ["Style text", "Store data", "Print errors", "Delete files"], answer: 1 },
+            { q: "`true` or `false` is what data type?", options: ["String", "Number", "Boolean", "Array"], answer: 2 }
+          ],
+          average: [
+            { q: "Which is a valid variable declaration in JavaScript?", options: ["let x = 5;", "var = 5x;", "5 = x;", "x := 5"], answer: 0 },
+            { q: "A list of values stored together is called a(n)...", options: ["String", "Boolean", "Array", "Function"], answer: 2 }
+          ],
+          brilliant: [
+            { q: "What does `typeof \"5\"` return in JavaScript?", options: ["number", "string", "boolean", "undefined"], answer: 1 },
+            { q: "Which data type would you use to store a person's age?", options: ["String", "Boolean", "Number", "Array"], answer: 2 }
+          ]
+        }
+      },
+      {
+        title: "2. Control Flow: Conditionals & Loops",
+        content: "Conditionals (`if / else`) let a program make decisions — 'if the answer is correct, add a point.' Loops (`for`, `while`) repeat an action without rewriting the same code — 'for each question, check the answer.' Together they're how programs react and repeat instead of running once, top to bottom.",
+        ytQuery: "if else statements and for loops explained",
+        questions: {
+          slow: [
+            { q: "Which keyword lets code make a decision?", options: ["for", "if", "function", "array"], answer: 1 },
+            { q: "Which keyword repeats an action multiple times?", options: ["if", "else", "for", "return"], answer: 2 }
+          ],
+          average: [
+            { q: "What does `else` do in an if/else statement?", options: ["Repeats code", "Runs when the if condition is false", "Declares a variable", "Ends the program"], answer: 1 },
+            { q: "A `while` loop repeats until...", options: ["A variable is declared", "A condition becomes false", "The page reloads", "Forever, always"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "How many times does `for(let i=0; i<3; i++)` run?", options: ["2 times", "3 times", "4 times", "Forever"], answer: 1 },
+            { q: "Which loop type guarantees at least one execution?", options: ["for", "while", "do-while", "forEach"], answer: 2 }
+          ]
+        }
+      },
+      {
+        title: "3. Functions & Reusability",
+        content: "A function is a named, reusable block of code that takes inputs (parameters) and can give back an output (return value). Instead of copy-pasting the same logic everywhere, you write it once as a function and call it whenever you need it — this is the foundation of clean, maintainable code.",
+        ytQuery: "javascript functions explained for beginners",
+        questions: {
+          slow: [
+            { q: "A function lets you...", options: ["Store one value", "Reuse a block of code", "Delete variables", "Style a page"], answer: 1 },
+            { q: "Which keyword defines a function in JavaScript?", options: ["func", "def", "function", "method"], answer: 2 }
+          ],
+          average: [
+            { q: "What does `return` do in a function?", options: ["Restarts the page", "Sends a value back", "Deletes a variable", "Loops forever"], answer: 1 },
+            { q: "The inputs a function receives are called...", options: ["Outputs", "Parameters", "Loops", "Only variables"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "A function that calls itself is called...", options: ["A loop", "Recursion", "A callback", "A closure"], answer: 1 },
+            { q: "What does a function with no `return` statement give back?", options: ["An error", "undefined", "An infinite loop", "null"], answer: 1 }
+          ]
+        }
+      },
+      {
+        title: "4. Basics of Algorithms & Complexity",
+        content: "An algorithm is just a defined series of steps to solve a problem. Some algorithms are faster than others as the input grows — this is measured with 'Big O' notation, like O(n) for checking every item one by one, or O(log n) for smarter approaches like binary search that cut the problem in half each step.",
+        ytQuery: "algorithms and big o notation explained simply",
+        questions: {
+          slow: [
+            { q: "An algorithm is best described as...", options: ["A programming language", "A series of steps to solve a problem", "A type of variable", "A computer part"], answer: 1 },
+            { q: "Checking every item in a list one by one is called...", options: ["Binary search", "Linear search", "Sorting", "Recursion"], answer: 1 }
+          ],
+          average: [
+            { q: "Binary search requires the list to be...", options: ["Random", "Sorted", "Empty", "Reversed"], answer: 1 },
+            { q: "What does 'Big O' notation describe?", options: ["Code style", "How fast/slow an algorithm scales", "Variable naming", "File size"], answer: 1 }
+          ],
+          brilliant: [
+            { q: "What is the time complexity of binary search?", options: ["O(n)", "O(n²)", "O(log n)", "O(1)"], answer: 2 },
+            { q: "What is the time complexity of checking every element in a list once?", options: ["O(1)", "O(n)", "O(log n)", "O(n²)"], answer: 1 }
+          ]
+        }
+      }
+    ]
+  }
+};
+
+let currentSubject = null;
+let currentTopicIndex = null;
+let currentLevel = null;
+
+// best stars per topic, 4 topics per subject, each 0-3
+let topicStars = {
+  Math: [0, 0, 0, 0],
+  Science: [0, 0, 0, 0],
+  Coding: [0, 0, 0, 0]
+};
+
+function starIcons(stars, max) {
+  return "★".repeat(stars) + "☆".repeat(max - stars);
+}
+
+function selectSubject(subject, nodeEl) {
+  currentSubject = subject;
+  currentTopicIndex = null;
+  currentLevel = null;
+
+  document.querySelectorAll(".subject-node").forEach(el => el.classList.remove("active"));
+  nodeEl.classList.add("active");
+
+  document.getElementById("panelLabel").innerText = subject + " · Syllabus";
+
+  const data = courseContent[subject];
+  const stars = topicStars[subject];
+
+  const topicsHtml = data.topics.map((t, i) => `
+    <div class="topic-pick-card" onclick="openTopic('${subject}', ${i})">
+      <div class="tp-left">
+        <h3>${t.title}</h3>
+        <p>${t.content.slice(0, 70)}...</p>
+      </div>
+      <div class="tp-right">
+        <span class="tp-stars">${starIcons(stars[i], 3)}</span>
+        <span class="tp-arrow">→</span>
+      </div>
+    </div>
+  `).join("");
+
+  document.getElementById("panelBody").innerHTML = `<div class="topics-wrap">${topicsHtml}</div>`;
+}
+
+function openTopic(subject, topicIndex) {
+  currentSubject = subject;
+  currentTopicIndex = topicIndex;
+  currentLevel = null;
+
+  const t = courseContent[subject].topics[topicIndex];
+  document.getElementById("panelLabel").innerText = subject + " · " + t.title;
+
+  document.getElementById("panelBody").innerHTML = `
+    <button class="back-btn" onclick="backToTopics()">← Back to ${subject} topics</button>
+
+    <div class="topic-card">
+      <h3>${t.title}</h3>
+      <p>${t.content}</p>
+      <a class="yt-link" href="${ytSearchUrl(t.ytQuery)}" target="_blank" rel="noopener">▶ Watch on YouTube</a>
+    </div>
+
+    <div class="test-divider">Ready to test yourself?</div>
+
+    <div class="label" style="margin-bottom:8px;display:block;">Choose your level</div>
+    <div class="level-row">
+      <button class="level-btn" onclick="selectLevel('slow', this)">🐢 Slow Learner</button>
+      <button class="level-btn" onclick="selectLevel('average', this)">🙂 Average</button>
+      <button class="level-btn" onclick="selectLevel('brilliant', this)">🚀 Brilliant</button>
+    </div>
+    <div id="quizArea"></div>
+  `;
+}
+
+function backToTopics() {
+  const nodeEl = document.getElementById("node-" + currentSubject);
+  selectSubject(currentSubject, nodeEl);
+}
+
+function selectLevel(level, btnEl) {
+  currentLevel = level;
+  document.querySelectorAll(".level-btn").forEach(b => b.classList.remove("active"));
+  btnEl.classList.add("active");
+  renderQuiz();
+}
+
+function renderQuiz() {
+  const questions = courseContent[currentSubject].topics[currentTopicIndex].questions[currentLevel];
+  let html = "";
+  questions.forEach((item, i) => {
+    html += `<div class="quiz-q" data-index="${i}">
+      <p>${i + 1}. ${item.q}</p>`;
+    item.options.forEach((opt, j) => {
+      html += `<label><input type="radio" name="q${i}" value="${j}"> ${opt}</label>`;
+    });
+    html += `</div>`;
+  });
+  html += `<button class="submit-quiz-btn" onclick="submitQuiz()">Submit Quiz</button>
+           <div id="quizResult"></div>`;
+  document.getElementById("quizArea").innerHTML = html;
+}
+
+function submitQuiz() {
+  const questions = courseContent[currentSubject].topics[currentTopicIndex].questions[currentLevel];
+  let score = 0;
+
+  questions.forEach((item, i) => {
+    const selected = document.querySelector(`input[name="q${i}"]:checked`);
+    if (selected && parseInt(selected.value) === item.answer) score++;
+  });
+
+  const pct = score / questions.length;
+  let stars = 1;
+  if (pct >= 1) stars = 3;
+  else if (pct >= 0.5) stars = 2;
+
+  if (stars > topicStars[currentSubject][currentTopicIndex]) {
+    topicStars[currentSubject][currentTopicIndex] = stars;
+    updateSubjectStarsUI(currentSubject);
+  }
+
+  document.getElementById("quizResult").innerHTML = `
+    <div class="quiz-result">
+      You scored ${score}/${questions.length} on ${currentLevel} level.
+      <div class="stars-earned">${starIcons(stars, 3)}</div>
+    </div>`;
+}
+
+function subjectTotalStars(subject) {
+  return topicStars[subject].reduce((a, b) => a + b, 0); // max 12
+}
+
+function updateSubjectStarsUI(subject) {
+  const total = subjectTotalStars(subject);
+  document.getElementById("stars-" + subject).innerText = total + "/12 ★";
+}
+
+/* ===================== PROGRESS TAB ===================== */
+function renderProgressTab() {
+  ["Math", "Science", "Coding"].forEach(subj => {
+    const total = subjectTotalStars(subj);
+    document.getElementById("progress-" + subj).innerText = total + "/12 ★";
+  });
+
+  const grand = subjectTotalStars("Math") + subjectTotalStars("Science") + subjectTotalStars("Coding"); // max 36
+  document.getElementById("totalStarsDisplay").innerText = `${grand} / 36 ★`;
+
+  let title = "Just Starting";
+  let sub = "Complete topic quizzes to earn stars and level up your rank.";
+  if (grand >= 33) { title = "Master Learner"; sub = "Near-perfect across every topic. Outstanding work."; }
+  else if (grand >= 25) { title = "Star Achiever"; sub = "You're excelling across subjects — keep pushing."; }
+  else if (grand >= 17) { title = "Confident Learner"; sub = "Solid progress. Keep testing yourself on the remaining topics."; }
+  else if (grand >= 9) { title = "Growing Learner"; sub = "You're building momentum — try a higher level quiz."; }
+  else if (grand >= 1) { title = "Beginner Learner"; sub = "Good start. Keep going to earn more stars."; }
+
+  document.getElementById("rankTitle").innerText = title;
+  document.getElementById("rankSub").innerText = sub;
+}
+
+/* ===================== TARGET HOURS + TIMER ===================== */
+let targetHours = 0;
+let timerSeconds = 0;
+let timerInterval = null;
+let timerRunning = false;
+
+function setTargetHours() {
+  const val = parseFloat(document.getElementById("targetHoursInput").value);
+  if (isNaN(val) || val <= 0) return;
+  targetHours = val;
+  updateProgressBar();
+}
+
+function toggleTimer() {
+  const btn = document.getElementById("timerToggleBtn");
+  if (timerRunning) {
+    clearInterval(timerInterval);
+    timerRunning = false;
+    btn.innerText = "Resume";
+  } else {
+    timerInterval = setInterval(() => {
+      timerSeconds++;
+      updateTimerDisplay();
+      updateProgressBar();
+    }, 1000);
+    timerRunning = true;
+    btn.innerText = "Pause";
+  }
+}
+
+function resetTimer() {
+  clearInterval(timerInterval);
+  timerRunning = false;
+  timerSeconds = 0;
+  document.getElementById("timerToggleBtn").innerText = "Start";
+  updateTimerDisplay();
+  updateProgressBar();
+}
+
+function updateTimerDisplay() {
+  const h = Math.floor(timerSeconds / 3600).toString().padStart(2, "0");
+  const m = Math.floor((timerSeconds % 3600) / 60).toString().padStart(2, "0");
+  const s = (timerSeconds % 60).toString().padStart(2, "0");
+  document.getElementById("timerDisplay").innerText = `${h}:${m}:${s}`;
+}
+
+function updateProgressBar() {
+  const fill = document.getElementById("progressFill");
+  const caption = document.getElementById("progressCaption");
+  const hoursStudied = timerSeconds / 3600;
+
+  if (targetHours <= 0) {
+    fill.style.width = "0%";
+    caption.innerText = "No goal set yet.";
+    return;
+  }
+
+  const pct = Math.min(100, (hoursStudied / targetHours) * 100);
+  fill.style.width = pct + "%";
+  caption.innerText = `${hoursStudied.toFixed(2)} / ${targetHours} hrs studied (${Math.round(pct)}%)`;
+}
+
+/* ===================== TO-DO PLANNER ===================== */
+let todos = []; // { text, done }
+
+function addTodo() {
+  const input = document.getElementById("todoInput");
+  const text = input.value.trim();
+  if (text === "") return;
+  todos.push({ text, done: false });
+  input.value = "";
+  renderTodos();
+}
+
+function toggleTodo(index) {
+  todos[index].done = !todos[index].done;
+  renderTodos();
+}
+
+function deleteTodo(index) {
+  todos.splice(index, 1);
+  renderTodos();
+}
+
+function renderTodos() {
+  const list = document.getElementById("todoList");
+  if (todos.length === 0) {
+    list.innerHTML = `<li class="empty">No tasks yet — add your first study task above.</li>`;
+    return;
+  }
+  list.innerHTML = todos.map((t, i) => `
+    <li class="${t.done ? "done" : ""}">
+      <input type="checkbox" ${t.done ? "checked" : ""} onchange="toggleTodo(${i})">
+      <span>${t.text}</span>
+      <button onclick="deleteTodo(${i})">✕</button>
+    </li>
+  `).join("");
+}
+
+renderTodos();
+</script>
 </body>
 </html>
